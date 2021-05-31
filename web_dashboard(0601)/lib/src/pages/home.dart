@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
       initialRoute: '/',
       routes: {
         '/next': (context) => NextPage(),
+        '/board': (context) => DashboardPage(),
       },
       title: '무야호 그만큼 신나신다는거조',
       theme: ThemeData(primarySwatch: Colors.blue),
