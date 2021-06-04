@@ -43,6 +43,7 @@ class AdaptiveScaffold extends StatefulWidget {
     @required this.destinations,
     this.onNavigationIndexChange,
     this.floatingActionButton,
+    Row child,
   });
 
   @override
