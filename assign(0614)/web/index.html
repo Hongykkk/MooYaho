@@ -32,29 +32,33 @@
 </head>
 
 <body>
-  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
-
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
-    var firebaseConfig = {
-      apiKey: "AIzaSyDMOqF-XwMMBnnLek9FrQumXjpH3utmZbs",
-      authDomain: "mooyaho-kumoh.firebaseapp.com",
-      projectId: "mooyaho-kumoh",
-      storageBucket: "mooyaho-kumoh.appspot.com",
-      messagingSenderId: "1009230014104",
-      appId: "1:1009230014104:web:24b81719c79176d8b1d2ed"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    /*if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
       window.addEventListener('flutter-first-frame', function () {
         navigator.serviceWorker.register('flutter_service_worker.js');
       });
-    }*/
+    }
   </script>
-  <script src="main.dart.js" type="application/javascript"></script>
-</body>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
 
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyARNmUtRyl8clpRlrGlFRjwWQxvIJabvc4",
+      authDomain: "creative-design-project.firebaseapp.com",
+      databaseURL: "https://creative-design-project-default-rtdb.firebaseio.com",
+      projectId: "creative-design-project",
+      storageBucket: "creative-design-project.appspot.com",
+      messagingSenderId: "725086534867",
+      appId: "1:725086534867:web:6cee56eacf0f61c0942826"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</body>
+<body>
+    <script src="main.dart.js" type="application/javascript"></script>
+</body>
 </html>

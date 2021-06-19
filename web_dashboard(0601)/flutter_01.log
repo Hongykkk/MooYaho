@@ -1,0 +1,68 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter run -d chrome
+
+## exception
+
+FileSystemException: FileSystemException: Failed to decode data using encoding 'utf-8', path = 'C:\Users\IBK\Documents\flutter\web\web_dashboard(0601)\web\index.html'
+
+```
+#0      _File._tryDecode (dart:io/file_impl.dart:564:7)
+#1      _File.readAsStringSync (dart:io/file_impl.dart:584:7)
+#2      ForwardingFile.readAsStringSync (package:file/src/forwarding/forwarding_file.dart:96:16)
+#3      ErrorHandlingFile.readAsStringSync.<anonymous closure> (package:flutter_tools/src/base/error_handling_io.dart:222:22)
+#4      _runSync (package:flutter_tools/src/base/error_handling_io.dart:597:14)
+#5      ErrorHandlingFile.readAsStringSync (package:flutter_tools/src/base/error_handling_io.dart:221:12)
+#6      _parseBasePathFromIndexHtml (package:flutter_tools/src/isolated/devfs_web.dart:1034:42)
+#7      new WebAssetServer (package:flutter_tools/src/isolated/devfs_web.dart:133:18)
+#8      WebAssetServer.start (package:flutter_tools/src/isolated/devfs_web.dart:221:35)
+<asynchronous suspension>
+#9      WebDevFS.create (package:flutter_tools/src/isolated/devfs_web.dart:723:22)
+<asynchronous suspension>
+#10     ResidentWebRunner.run.<anonymous closure> (package:flutter_tools/src/isolated/resident_web_runner.dart:281:25)
+<asynchronous suspension>
+#11     asyncGuard.<anonymous closure> (package:flutter_tools/src/base/async_guard.dart:111:24)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel master, 2.3.0-17.0.pre.121, on Microsoft Windows [Version 10.0.19041.985], locale ko-KR)
+    • Flutter version 2.3.0-17.0.pre.121 at C:\Users\IBK\src\flutter_windows_2.0.1-stable\flutter
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 71e711547f (4 days ago), 2021-05-30 19:31:03 -0700
+    • Engine revision 73fe3dd31c
+    • Dart version 2.14.0 (build 2.14.0-165.0.dev)
+
+[✓] Android toolchain - develop for Android devices (Android SDK version 30.0.3)
+    • Android SDK at C:\Users\IBK\AppData\Local\Android\sdk
+    • Platform android-30, build-tools 30.0.3
+    • Java binary at: C:\Program Files\Android\Android Studio\jre\bin\java
+    • Java version OpenJDK Runtime Environment (build 1.8.0_242-release-1644-b01)
+    • All Android licenses accepted.
+
+[✓] Chrome - develop for the web
+    • Chrome at C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+
+[✓] Android Studio (version 4.1.0)
+    • Android Studio at C:\Program Files\Android\Android Studio
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 1.8.0_242-release-1644-b01)
+
+[✓] VS Code (version 1.56.2)
+    • VS Code at C:\Users\IBK\AppData\Local\Programs\Microsoft VS Code
+    • Flutter extension version 3.23.0
+
+[✓] Connected device (2 available)
+    • Chrome (web) • chrome • web-javascript • Google Chrome 90.0.4430.212
+    • Edge (web)   • edge   • web-javascript • Microsoft Edge 91.0.864.37
+
+• No issues found!
+```

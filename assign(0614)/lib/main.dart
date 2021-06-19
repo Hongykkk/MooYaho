@@ -1,9 +1,13 @@
 import 'dart:convert';
+// import 'dart:html';
 import "dart:io";
 import 'dart:async';
-//import 'dart:html';
+import 'dart:developer';
+import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
@@ -20,6 +24,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,6 +51,11 @@ class Label {
   String labelName;
   Color labelColor;
   Label(this.labelName, this.labelColor);
+  //라벨 이름 string 반환
+  @override
+  String toString() {
+    return '${labelName}';
+  }
 }
 
 class MyAssignmentPage extends StatefulWidget {
@@ -59,8 +69,11 @@ class MyAssignmentPage extends StatefulWidget {
 class _MyAssignmentPageState extends State<MyAssignmentPage> {
   //final _formKey = GlobalKey<FormState>();
   //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  final nameController = TextEditingController();
   final titleController = TextEditingController();
-  final subtitleController = TextEditingController();
+  final work_uidController = TextEditingController();
   final labelController = TextEditingController();
   final emailController = TextEditingController();
 
@@ -188,8 +201,9 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
 
   @override
   void dispose() {
+    nameController.dispose();
     titleController.dispose();
-    subtitleController.dispose();
+    work_uidController.dispose();
     labelController.dispose();
     super.dispose();
   }
@@ -245,6 +259,16 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
                   TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
+                      labelText: "사용자 이름",
+                    ),
+                    controller: nameController,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
                       labelText: "제목",
                     ),
                     controller: titleController,
@@ -255,9 +279,9 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
                   TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: "부제목",
+                      labelText: "작업 고유번호",
                     ),
-                    controller: subtitleController,
+                    controller: work_uidController,
                   ),
                   SizedBox(
                     height: 20,
@@ -362,7 +386,19 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
                         child: Container(
                             padding: EdgeInsets.fromLTRB(10, 0, 5, 10),
                             child: ElevatedButton(
-                              onPressed: () => {},
+                              onPressed: () => {
+                                //Firestore.instance.collection(city).document('Attractions').updateData({"data": FieldValue.arrayUnion(obj)});
+                                firestore.collection('users').add({
+                                  'user name': '${nameController.text}',
+                                  'title': '${titleController.text}',
+                                  'work_uid': '${work_uidController.text}',
+                                  // 'label': [labels[0], labels[1]],
+                                  'email': '${emailController.text}',
+                                  'timestamp': DateTime.now(),
+                                  // 'name': FirebaseAuth.instance.currentUser!.displayName,
+                                  // 'userId': FirebaseAuth.instance.currentUser!.uid,
+                                }),
+                              },
                               child: Text("생성"),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.white,
