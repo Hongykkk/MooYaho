@@ -1,21 +1,18 @@
-import 'dart:convert';
-// import 'dart:html';
 import "dart:io";
 import 'dart:async';
-import 'dart:developer';
-import 'dart:async';
+import 'dart:typed_data';
+import 'package:firebase/firebase.dart' as fb;
+import 'package:image_picker/image_picker.dart';
 
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-
-import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import "package:firebase_storage/firebase_storage.dart";
 import "package:firebase_auth/firebase_auth.dart";
-import 'package:permission_handler/permission_handler.dart';
+
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,6 +67,7 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
   //final _formKey = GlobalKey<FormState>();
   //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
   final nameController = TextEditingController();
   final titleController = TextEditingController();
@@ -104,9 +102,12 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
   File _image;
   final picker = ImagePicker();
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  var mediaData;
+  String mimeType;
+  Uint8List bytes;
+  String fileName;
   User _user;
-  FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
-  String _profileImageURL = "";
 
   @override
   void initState() {
@@ -120,8 +121,9 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
   }
 
   Future<void> getImage() async {
-    final pickedFile = await picker.getImage(
+    PickedFile pickedFile = await picker.getImage(
         source: ImageSource.gallery, maxHeight: 500, maxWidth: 500);
+    bytes = await pickedFile.readAsBytes();
 
     setState(() {
       if (pickedFile != null) {
@@ -166,9 +168,22 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
     }
   }*/
 
+  Future<Uri> _uploadImageToStorage() async {
+    // fileName = basename(_image.path);
+    // print(fileName);
+    Reference ref =
+        _firebaseStorage.ref().child('uploads/${DateTime.now()}.PNG');
+    UploadTask uploadTask =
+        ref.putData(bytes, SettableMetadata(contentType: 'image/png'));
+    TaskSnapshot taskSnapshot = await uploadTask
+        .whenComplete(() => print('done'))
+        .catchError((error) => print('error:${error}'));
+    String url = await taskSnapshot.ref.getDownloadURL();
+  }
+
   void _openDialog(String title, Widget content) {
     showDialog(
-        context: context,
+        context: this.context,
         builder: (_) {
           return AlertDialog(
             contentPadding: EdgeInsets.all(6.0),
@@ -176,10 +191,11 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
             content: content,
             actions: [
               ElevatedButton(
-                  onPressed: Navigator.of(context).pop, child: Text("Cancel")),
+                  onPressed: Navigator.of(this.context).pop,
+                  child: Text("Cancel")),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop;
+                    Navigator.of(this.context).pop;
                     setState(() => _mainColor = _tempMainColor);
                   },
                   child: Text("Submit")),
@@ -387,17 +403,18 @@ class _MyAssignmentPageState extends State<MyAssignmentPage> {
                             padding: EdgeInsets.fromLTRB(10, 0, 5, 10),
                             child: ElevatedButton(
                               onPressed: () => {
-                                //Firestore.instance.collection(city).document('Attractions').updateData({"data": FieldValue.arrayUnion(obj)});
-                                firestore.collection('users').add({
-                                  'user name': '${nameController.text}',
-                                  'title': '${titleController.text}',
-                                  'work_uid': '${work_uidController.text}',
-                                  // 'label': [labels[0], labels[1]],
-                                  'email': '${emailController.text}',
-                                  'timestamp': DateTime.now(),
-                                  // 'name': FirebaseAuth.instance.currentUser!.displayName,
-                                  // 'userId': FirebaseAuth.instance.currentUser!.uid,
-                                }),
+                                // 정보 올리기
+                                // firestore.collection('users').add({
+                                //   'user name': '${nameController.text}',
+                                //   'title': '${titleController.text}',
+                                //   'work_uid': '${work_uidController.text}',
+                                //   // 'label': [labels[0], labels[1]],
+                                //   'email': '${emailController.text}',
+                                //   'timestamp': DateTime.now(),
+                                //   // 'name': FirebaseAuth.instance.currentUser!.displayName,
+                                //   // 'userId': FirebaseAuth.instance.currentUser!.uid,
+                                // }),
+                                _uploadImageToStorage(),
                               },
                               child: Text("생성"),
                               style: ElevatedButton.styleFrom(
